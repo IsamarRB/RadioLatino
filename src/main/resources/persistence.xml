@@ -1,0 +1,26 @@
+<persistence
+        xmlns="http://jakarta.ee/xml/ns/persistence"
+        version="3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://jakarta.ee/xml/ns/persistence
+        http://jakarta.ee/xml/ns/persistence.xsd">
+    <persistence-unit name="miUnidadPersistencia">
+        <properties>
+
+            <!-- Configuración de PostgreSQL en Render -->
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql:// "/>
+            <property name="jakarta.persistence.jdbc.user" value="mvn package"/>
+            <property name="jakarta.persistence.jdbc.password" value=" "/>
+
+            <!-- Configuración de Hibernate -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+
+            <!-- Opcional: Configuración para mejorar el rendimiento -->
+            <property name="hibernate.jdbc.batch_size" value="20"/>
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

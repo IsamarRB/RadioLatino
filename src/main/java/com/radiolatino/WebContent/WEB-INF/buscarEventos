@@ -1,0 +1,31 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%
+    com.radiolatino.model.Usuario usuario = (com.radiolatino.model.Usuario) session.getAttribute("usuario");
+    if (usuario == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RadioLatino - Buscar Contenido</title>
+</head>
+<body>
+    <h2>¡Bienvenido, ${usuario.nombre}!</h2>
+
+    <form action="buscar" method="get">
+        Buscar por nombre o descripción:
+        <input type="text" name="criterio" />
+        <input type="submit" value="Buscar" />
+    </form>
+
+    <br/>
+    <a href="canciones">Ver todas las canciones</a> |
+    <a href="podcasts">Ver todos los podcasts</a> |
+    <a href="logout">Cerrar sesión</a>
+</body>
+</html>
