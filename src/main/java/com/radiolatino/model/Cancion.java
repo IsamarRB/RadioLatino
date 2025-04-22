@@ -23,7 +23,7 @@ public class Cancion {
     @OneToOne(mappedBy = "cancion")
     private List<Cantante> canciones;
 
-    public Cancion(String titulo, Cantante cantante, Genero genero) {}
+    public Cancion() {}
 
     public Cancion(String nombre) { this.titulo= titulo;
     }

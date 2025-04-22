@@ -12,7 +12,7 @@ public class CantanteService implements BaseService<Cantante> {
 
     private final CantanteRepository cantanteRepository;
 
-    public CantanteService() {
+    public CantanteService(CantanteRepository cantanteRepository) {
         this.cantanteRepository = cantanteRepository;
     }
 
@@ -34,5 +34,15 @@ public class CantanteService implements BaseService<Cantante> {
     @Override
     public void eliminar(Long id) {
         cantanteRepository.deleteById(id);
+    }
+
+    // Búsqueda exacta por nombre
+    public Cantante buscarPorNombreExacto(String nombre) {
+        return cantanteRepository.findByNombre(nombre);
+    }
+
+    // Búsqueda parcial e insensible a mayúsculas
+    public List<Cantante> buscarPorNombre(String nombre) {
+        return cantanteRepository.findByNombreContainingIgnoreCase(nombre);
     }
 }

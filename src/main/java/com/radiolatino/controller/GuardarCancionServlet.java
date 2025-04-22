@@ -39,7 +39,7 @@ public class GuardarCancionServlet extends HttpServlet {
             Cantante cantante = em.find(Cantante.class, cantanteId);
             Genero genero = em.find(Genero.class, generoId);
 
-            Cancion nueva = new Cancion(titulo, cantante, genero);
+            Cancion nueva = new Cancion();
 
             em.getTransaction().begin();
             em.persist(nueva);

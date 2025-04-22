@@ -2,17 +2,17 @@ package com.radiolatino.service;
 
 import com.radiolatino.model.Usuario;
 import com.radiolatino.repository.UsuarioRepository;
-import jakarta.xml.ws.ServiceMode;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@ServiceMode
+@Service
 public class UsuarioService implements BaseService<Usuario> {
 
-    private UsuarioRepository usuarioRepository = null;
+    private final UsuarioRepository usuarioRepository;
 
-    public UsuarioService() {
+    public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
@@ -36,6 +36,8 @@ public class UsuarioService implements BaseService<Usuario> {
         usuarioRepository.deleteById(id);
     }
 
-    public Usuario login(String usuario, String password) {
+    // Método de login (ejemplo simple, sin cifrado)
+    public Usuario login(String correo, String password) {
+        return usuarioRepository.findByCorreo(correo, password);
     }
 }
