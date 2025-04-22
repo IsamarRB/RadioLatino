@@ -10,9 +10,9 @@ import java.util.Optional;
 @Service
 public class GeneroService implements BaseService<Genero> {
 
-    private final GeneroRepository generoRepository;
+    private GeneroRepository generoRepository;
 
-    public GeneroService(GeneroRepository generoRepository) {
+    public GeneroService() {
         this.generoRepository = generoRepository;
     }
 

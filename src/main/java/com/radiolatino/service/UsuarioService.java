@@ -10,9 +10,9 @@ import java.util.Optional;
 @Service
 public class UsuarioService implements BaseService<Usuario> {
 
-    private final UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService() {
         this.usuarioRepository = usuarioRepository;
     }
 

@@ -10,9 +10,9 @@ import java.util.Optional;
 @Service
 public class CantanteService implements BaseService<Cantante> {
 
-    private final CantanteRepository cantanteRepository;
+    private CantanteRepository cantanteRepository;
 
-    public CantanteService(CantanteRepository cantanteRepository) {
+    public CantanteService() {
         this.cantanteRepository = cantanteRepository;
     }
 

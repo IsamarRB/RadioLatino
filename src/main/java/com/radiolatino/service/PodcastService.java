@@ -10,9 +10,9 @@ import java.util.Optional;
 @Service
 public class PodcastService implements BaseService<Podcast> {
 
-    private final PodcastRepository podcastRepository;
+    private PodcastRepository podcastRepository;
 
-    public PodcastService(PodcastRepository podcastRepository) {
+    public PodcastService() {
         this.podcastRepository = podcastRepository;
     }
 

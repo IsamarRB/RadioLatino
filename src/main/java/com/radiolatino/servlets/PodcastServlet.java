@@ -19,7 +19,7 @@ public class PodcastServlet extends HttpServlet {
         String accion = req.getParameter("accion");
 
         if ("listar".equals(accion)) {
-            List<Podcast> podcasts = service.listar();
+            List<Podcast> podcasts = service.listarTodos();
             req.setAttribute("podcasts", podcasts);
             req.getRequestDispatcher("/WEB-INF/vistas/listarPodcasts.jsp").forward(req, resp);
         }
