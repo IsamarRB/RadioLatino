@@ -12,12 +12,9 @@ public class CancionService implements BaseService<Cancion> {
 
     private final CancionRepository cancionRepository;
 
+    // Spring inyectará el repository automáticamente
     public CancionService(CancionRepository cancionRepository) {
         this.cancionRepository = cancionRepository;
-    }
-
-    public CancionService() {
-
     }
 
     @Override
