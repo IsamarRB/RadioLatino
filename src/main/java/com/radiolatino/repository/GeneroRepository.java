@@ -1,40 +1,37 @@
 package com.radiolatino.repository;
 
 import com.radiolatino.model.Genero;
+
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-
+import java.util.List;
+import java.util.Optional;
 
 @Stateless
 public class GeneroRepository {
 
-    @PersistenceContext(unitName = "RadiolatinoPU")
+    @PersistenceContext(unitName = "defaultPU")
     private EntityManager em;
 
-    public Genero findByNombre(String nombre) {
-        try {
-            return em.createQuery("SELECT g FROM Genero g WHERE g.nombre = :nombre", Genero.class)
-                    .setParameter("nombre", nombre)
-                    .getSingleResult();
-        } catch (Exception e) {
-            return null; // o lanzar una excepción personalizada si prefieres
+    public List<Genero> findAll() {
+        return em.createQuery("SELECT g FROM Genero g", Genero.class).getResultList();
+    }
+
+    public Optional<Genero> findById(Long id) {
+        return Optional.ofNullable(em.find(Genero.class, id));
+    }
+
+    public Genero save(Genero genero) {
+        if (genero.getId() == null) {
+            em.persist(genero);
+            return genero;
+        } else {
+            return em.merge(genero);
         }
     }
 
-    public void save(Genero genero) {
-        em.persist(genero);
-    }
-
-    public Genero find(Long id) {
-        return em.find(Genero.class, id);
-    }
-
-    public void update(Genero genero) {
-        em.merge(genero);
-    }
-
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         Genero genero = em.find(Genero.class, id);
         if (genero != null) {
             em.remove(genero);

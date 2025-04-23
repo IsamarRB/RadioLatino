@@ -2,19 +2,17 @@ package com.radiolatino.service;
 
 import com.radiolatino.model.Genero;
 import com.radiolatino.repository.GeneroRepository;
-import org.springframework.stereotype.Service;
 
+import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Stateless
 public class GeneroService implements BaseService<Genero> {
 
+    @Inject
     private GeneroRepository generoRepository;
-
-    public GeneroService() {
-        this.generoRepository = generoRepository;
-    }
 
     @Override
     public List<Genero> listarTodos() {
@@ -36,3 +34,4 @@ public class GeneroService implements BaseService<Genero> {
         generoRepository.deleteById(id);
     }
 }
+
