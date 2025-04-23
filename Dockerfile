@@ -13,7 +13,7 @@ COPY . .
 
 # Compila y construye el archivo WAR
 RUN mvn clean package -DskipTests
-# Resultado esperado: target/RadioLatino-1.0-SNAPSHOT.war
+# Resultado esperado: target/RadioLatino-1.0-SNAPSHOTgit.war
 
 # Fase 2: Imagen final con Tomcat
 FROM tomcat:9.0-jdk17
