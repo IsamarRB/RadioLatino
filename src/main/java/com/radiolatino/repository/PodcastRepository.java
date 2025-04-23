@@ -1,42 +1,41 @@
 package com.radiolatino.repository;
 
 import com.radiolatino.model.Podcast;
+
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-
-
 import java.util.List;
+import java.util.Optional;
 
 @Stateless
 public class PodcastRepository {
 
-    @PersistenceContext(unitName = "defaultPU")
+    @PersistenceContext(unitName = "radiolatinoPU")
     private EntityManager em;
 
-    public List<Podcast> findByGeneroNombre(String nombreGenero) {
-        return em.createQuery("SELECT p FROM Podcast p WHERE p.genero.nombre = :nombreGenero", Podcast.class)
-                .setParameter("nombreGenero", nombreGenero)
-                .getResultList();
+    public List<Podcast> findAll() {
+        return em.createQuery("SELECT p FROM Podcast p", Podcast.class).getResultList();
     }
 
-    public Podcast findById(Long id) {
-        return em.find(Podcast.class, id);
+    public Optional<Podcast> findById(Long id) {
+        Podcast podcast = em.find(Podcast.class, id);
+        return Optional.ofNullable(podcast);
     }
 
-    public void save(Podcast podcast) {
-        em.persist(podcast);
+    public Podcast save(Podcast podcast) {
+        if (podcast.getId() == null) {
+            em.persist(podcast);
+            return podcast;
+        } else {
+            return em.merge(podcast);
+        }
     }
 
-    public void update(Podcast podcast) {
-        em.merge(podcast);
-    }
-
-    public void delete(Long id) {
-        Podcast podcast = findById(id);
+    public void deleteById(Long id) {
+        Podcast podcast = em.find(Podcast.class, id);
         if (podcast != null) {
             em.remove(podcast);
         }
     }
 }
-

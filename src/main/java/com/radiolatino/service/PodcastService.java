@@ -2,19 +2,17 @@ package com.radiolatino.service;
 
 import com.radiolatino.model.Podcast;
 import com.radiolatino.repository.PodcastRepository;
-import org.springframework.stereotype.Service;
 
+import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Stateless
 public class PodcastService implements BaseService<Podcast> {
 
+    @Inject
     private PodcastRepository podcastRepository;
-
-    public PodcastService() {
-        this.podcastRepository = podcastRepository;
-    }
 
     @Override
     public List<Podcast> listarTodos() {
