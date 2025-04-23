@@ -2,19 +2,18 @@ package com.radiolatino.service;
 
 import com.radiolatino.model.Cantante;
 import com.radiolatino.repository.CantanteRepository;
-import org.springframework.stereotype.Service;
+
+import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Stateless
 public class CantanteService implements BaseService<Cantante> {
 
+    @Inject
     private CantanteRepository cantanteRepository;
-
-    public CantanteService() {
-        this.cantanteRepository = cantanteRepository;
-    }
 
     @Override
     public List<Cantante> listarTodos() {
@@ -36,13 +35,12 @@ public class CantanteService implements BaseService<Cantante> {
         cantanteRepository.deleteById(id);
     }
 
-    // Búsqueda exacta por nombre
     public Cantante buscarPorNombreExacto(String nombre) {
-        return cantanteRepository.findByNombre(nombre);
+        return cantanteRepository.findByNombreExacto(nombre);
     }
 
-    // Búsqueda parcial e insensible a mayúsculas
     public List<Cantante> buscarPorNombre(String nombre) {
-        return cantanteRepository.findByNombreContainingIgnoreCase(nombre);
+        return cantanteRepository.buscarPorNombre(nombre);
     }
 }
+
