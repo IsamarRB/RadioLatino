@@ -11,7 +11,7 @@ public class CancionService {
     private final CancionRepository cancionRepository;
 
     // Inyección manual para entorno Java EE puro
-    public CancionService(CancionRepository cancionRepository) {
+    public CancionService() {
         this.cancionRepository = cancionRepository;
     }
 

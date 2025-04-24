@@ -13,32 +13,45 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/app")
-public class RadioNicaServlet extends HttpServlet {
+public class RadioLatinoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private UsuarioDAO usuarioDAO;
 
     @Override
     public void init() throws ServletException {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("RadioNicaPU");
-        usuarioDAO = new UsuarioDAO();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("EvaluacionPU");
+        usuarioDAO = new UsuarioDAO(emf);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
 
-        switch (accion) {
-            case "login":
-                procesarLogin(request, response);
-                break;
-            // Agregar más acciones: buscar, guardar, eliminar, etc.
+        if (accion != null) {
+            switch (accion) {
+                case "login":
+                    procesarLogin(request, response);
+                    break;
+                default:
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción no soportada");
+            }
+        } else {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción no especificada");
         }
     }
 
     private void procesarLogin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String correo = request.getParameter("correo");
+
+        if (correo == null || correo.isEmpty()) {
+            request.setAttribute("error", "Correo es requerido");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            return;
+        }
+
         Usuario usuario = usuarioDAO.findByCorreo(correo);
 
         if (usuario != null) {
@@ -50,4 +63,3 @@ public class RadioNicaServlet extends HttpServlet {
         }
     }
 }
-
