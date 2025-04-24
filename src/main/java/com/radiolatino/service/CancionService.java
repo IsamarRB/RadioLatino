@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class CancionService {
 
-    private final CancionRepository cancionRepository;
+    private CancionRepository cancionRepository;
 
     // Inyección manual para entorno Java EE puro
     public CancionService() {
