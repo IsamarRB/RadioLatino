@@ -92,7 +92,7 @@
     </dependencies>
 
     <build>
-        <finalName>RadioLatino</finalName>
+        <finalName>radiolatino</finalName> <!-- El nombre del WAR será radiolatino.war -->
         <plugins>
             <!-- WAR Plugin -->
             <plugin>
