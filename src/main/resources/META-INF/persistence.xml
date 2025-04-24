@@ -3,24 +3,26 @@
         version="3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://jakarta.ee/xml/ns/persistence
         http://jakarta.ee/xml/ns/persistence.xsd">
+
     <persistence-unit name="miUnidadPersistencia">
+        <class>com.radiolatino.model.Usuario</class> <!-- Asegúrate de incluir tus entidades -->
+
         <properties>
-
-            <!-- Configuración de PostgreSQL en Render -->
+            <!-- Configuración para PostgreSQL (Docker) -->
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql:// "/>
-            <property name="jakarta.persistence.jdbc.user" value="mvn package"/>
-            <property name="jakarta.persistence.jdbc.password" value=" "/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://db:5432/radiolatino"/>
+            <property name="jakarta.persistence.jdbc.user" value="postgres"/>
+            <property name="jakarta.persistence.jdbc.password" value="mypassword"/>
 
-            <!-- Configuración de Hibernate -->
+            <!-- Hibernate -->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
 
-            <!-- Opcional: Configuración para mejorar el rendimiento -->
+            <!-- Performance tuning (opcional) -->
             <property name="hibernate.jdbc.batch_size" value="20"/>
-            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.use_second_level_cache" value="false"/>
         </properties>
     </persistence-unit>
 </persistence>
