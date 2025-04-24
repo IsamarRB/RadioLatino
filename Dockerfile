@@ -22,7 +22,7 @@ WORKDIR /usr/local/tomcat
 RUN rm -rf webapps/*
 
 # Copia el WAR desde el builder
-COPY --from=builder /app/target/*.war webapps/ROOT.war
+COPY --from=builder /app/target/radiolatino.war webapps/ROOT.war
 
 EXPOSE 8080
 
