@@ -6,6 +6,9 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
+
+<script src="${pageContext.request.contextPath}/js/login.js"></script>
+
     <div class="container">
         <h2>Iniciar Sesión</h2>
 
