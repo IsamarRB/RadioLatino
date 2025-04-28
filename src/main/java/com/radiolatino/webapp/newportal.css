@@ -1,0 +1,87 @@
+.fondo {
+	background-color: #FFAAAA;
+}
+
+.registration {
+	padding: 10px;
+	text-align:center;
+  background-color:#801515;
+  color: white;
+}
+
+.fontAwesome {
+  font-family: 'Helvetica', FontAwesome, sans-serif;
+}
+
+.credentials{
+	border: 5px solid #801515;
+	color:#801515;
+	font-weight: bold;
+	padding:15px;
+}
+
+.error{
+	text-align: center;
+	color: red;
+	font-weight: bold;
+}
+
+.success{
+	text-align: center;
+	color: green;
+	font-weight: bold;
+}
+
+.userInformation{
+	margin:5px;
+	border:3px double gray;
+	padding:3px;
+	text-align: left;
+	font-weight: bold;
+	color: white;
+}
+.userInformation a{
+	color:blue;
+}
+
+.release{
+	font-weight: bold;
+	font-size: medium;
+	text-align: center;
+	margin:4px;
+	color: white;
+}
+.tableHeaderAll {
+	padding: 5px;
+	text-align:center;
+  background-color:#801515;
+  color: white;
+	font-size: small
+}
+
+.tableHeaderUser {
+	padding: 5px;
+	text-align:center;
+  	background-color:#ffdfdf;
+  	color: #801515;
+	font-size: small
+}
+
+.separador {
+	background-color: #801515;
+	border: 0;
+	height: 3px;
+	margin: 2px;
+}
+.welcome{
+	text-align: center;
+	color: #801515;
+}
+
+.generic{
+	width: inherit;
+	height: inherit;
+	border:3px double gray;
+	color: white;
+	text-align: center;
+}
