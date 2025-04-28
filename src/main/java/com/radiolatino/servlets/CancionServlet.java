@@ -18,7 +18,10 @@ public class CancionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String accion = req.getParameter("accion");
-        if (accion == null) accion = "listar";
+        if (accion == null || accion.isEmpty()) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción GET no proporcionada.");
+            return;
+        }
 
         switch (accion) {
             case "listar":
@@ -34,13 +37,18 @@ public class CancionServlet extends HttpServlet {
                 eliminarCancion(req, resp);
                 break;
             default:
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción no reconocida.");
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción GET no reconocida.");
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String accion = req.getParameter("accion");
+        if (accion == null || accion.isEmpty()) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción POST no proporcionada.");
+            return;
+        }
+
         if ("guardar".equals(accion)) {
             guardarCancion(req, resp);
         } else {
@@ -57,49 +65,70 @@ public class CancionServlet extends HttpServlet {
     }
 
     private void mostrarDetalle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long id = Long.parseLong(req.getParameter("id"));
-        Optional<Cancion> cancion = cancionService.buscarPorId(id);
-        if (cancion.isPresent()) {
-            req.setAttribute("cancion", cancion.get());
-            req.getRequestDispatcher("/WEB-INF/vistas/detalleCancion.jsp").forward(req, resp);
-        } else {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Canción no encontrada.");
+        try {
+            Long id = Long.parseLong(req.getParameter("id"));
+            Optional<Cancion> cancion = cancionService.buscarPorId(id);
+            if (cancion.isPresent()) {
+                req.setAttribute("cancion", cancion.get());
+                req.getRequestDispatcher("/WEB-INF/vistas/detalleCancion.jsp").forward(req, resp);
+            } else {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Canción no encontrada.");
+            }
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido para buscar la canción.");
         }
     }
 
     private void mostrarFormularioEdicion(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String idParam = req.getParameter("id");
-        if (idParam != null) {
-            Long id = Long.parseLong(idParam);
-            Optional<Cancion> cancion = cancionService.buscarPorId(id);
-            cancion.ifPresent(c -> req.setAttribute("cancion", c));
+        try {
+            String idParam = req.getParameter("id");
+            if (idParam != null) {
+                Long id = Long.parseLong(idParam);
+                Optional<Cancion> cancion = cancionService.buscarPorId(id);
+                if (cancion.isPresent()) {
+                    req.setAttribute("cancion", cancion.get());
+                }
+            }
+            req.getRequestDispatcher("/WEB-INF/vistas/formularioCancion.jsp").forward(req, resp);
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido para editar la canción.");
         }
-        req.getRequestDispatcher("/WEB-INF/vistas/formularioCancion.jsp").forward(req, resp);
     }
 
     private void guardarCancion(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String idStr = req.getParameter("id");
-        Long id = (idStr != null && !idStr.isEmpty()) ? Long.parseLong(idStr) : null;
+        try {
+            String idStr = req.getParameter("id");
+            Long id = (idStr != null && !idStr.isEmpty()) ? Long.parseLong(idStr) : null;
 
-        String titulo = req.getParameter("titulo");
-        String genero = req.getParameter("genero");
-        String cantante = req.getParameter("cantante");
+            String titulo = req.getParameter("titulo");
+            String genero = req.getParameter("genero");
+            String cantante = req.getParameter("cantante");
 
-        Cancion cancion = new Cancion();
-        cancion.setId(id);
-        cancion.setTitulo(titulo);
-        cancion.setGenero(genero);
-        cancion.setCantante(cantante);
+            if (titulo == null || genero == null || cantante == null || titulo.isEmpty() || genero.isEmpty() || cantante.isEmpty()) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Datos insuficientes para guardar la canción.");
+                return;
+            }
 
-        cancionService.guardar(cancion);
-        resp.sendRedirect("CancionServlet?accion=listar");
+            Cancion cancion = new Cancion();
+            cancion.setId(id);
+            cancion.setTitulo(titulo);
+            cancion.setGenero(genero);
+            cancion.setCantante(cantante);
+
+            cancionService.guardar(cancion);
+            resp.sendRedirect("CancionServlet?accion=listar");
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido para guardar la canción.");
+        }
     }
 
     private void eliminarCancion(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Long id = Long.parseLong(req.getParameter("id"));
-        cancionService.eliminar(id);
-        resp.sendRedirect("CancionServlet?accion=listar");
+        try {
+            Long id = Long.parseLong(req.getParameter("id"));
+            cancionService.eliminar(id);
+            resp.sendRedirect("CancionServlet?accion=listar");
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido para eliminar la canción.");
+        }
     }
 }
-
-
