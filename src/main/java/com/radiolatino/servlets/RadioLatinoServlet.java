@@ -56,7 +56,7 @@ public class RadioLatinoServlet extends HttpServlet {
 
         if (usuario != null) {
             request.getSession().setAttribute("usuario", usuario);
-            request.getRequestDispatcher("/WEB-INF/jsp/buscarEventos.jsp.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/BuscarEventos.jsp.jsp").forward(request, response);
         } else {
             request.setAttribute("error", "Correo no válido");
             request.getRequestDispatcher("/index.jsp").forward(request, response);

@@ -28,13 +28,13 @@ public class UsuarioServlet extends HttpServlet {
                 resp.sendRedirect("BuscarEventos.jsp");
             } else {
                 req.setAttribute("error", "Usuario o contraseña incorrectos");
-                req.getRequestDispatcher("login.jsp").forward(req, resp);
+                req.getRequestDispatcher("Login.jsp").forward(req, resp);
             }
         }
 
         if ("logout".equals(accion)) {
             req.getSession().invalidate();
-            resp.sendRedirect("login.jsp");
+            resp.sendRedirect("Login.jsp");
         }
     }
 }
