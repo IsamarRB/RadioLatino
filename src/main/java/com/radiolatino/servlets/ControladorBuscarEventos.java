@@ -1,5 +1,6 @@
 package com.radiolatino.servlets;
 
+import com.radiolatino.model.Evento;
 import com.radiolatino.service.EventoService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/BuscarEventos")
 public class ControladorBuscarEventos extends HttpServlet {

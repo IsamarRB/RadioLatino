@@ -1,20 +1,18 @@
 package com.radiolatino.dao;
 
 import com.radiolatino.model.Genero;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-
+import jakarta.persistence.Persistence;
 import java.util.List;
+import java.util.Optional;
 
 public class GeneroDAO {
 
-    private EntityManagerFactory emf;
+    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("emisoradb2");
 
-    public GeneroDAO(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-
-    public List<Genero> findAll() {
+    public List<Genero> listarTodos() {
         EntityManager em = emf.createEntityManager();
         try {
             return em.createQuery("SELECT g FROM Genero g", Genero.class).getResultList();
@@ -23,23 +21,10 @@ public class GeneroDAO {
         }
     }
 
-    public Genero buscarPorId(Long id) {
+    public Optional<Genero> buscarPorId(Long id) {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.find(Genero.class, id);
-        } finally {
-            em.close();
-        }
-    }
-
-    public List<Genero> buscarPorNombre(String nombre) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            return em.createQuery(
-                            "SELECT g FROM Genero g WHERE LOWER(g.nombre) LIKE :nombre",
-                            Genero.class)
-                    .setParameter("nombre", "%" + nombre.toLowerCase() + "%")
-                    .getResultList();
+            return Optional.ofNullable(em.find(Genero.class, id));
         } finally {
             em.close();
         }
@@ -50,9 +35,9 @@ public class GeneroDAO {
         try {
             em.getTransaction().begin();
             if (genero.getId() == null) {
-                em.persist(genero);
+                em.persist(genero); // Crear nuevo género
             } else {
-                em.merge(genero);
+                em.merge(genero); // Actualizar género existente
             }
             em.getTransaction().commit();
         } finally {
