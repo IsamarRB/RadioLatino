@@ -2,62 +2,116 @@ package com.radiolatino.dao;
 
 import com.radiolatino.model.Podcast;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class PodcastDAO {
 
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("emisoradb2");
+    private DataSource dataSource;
 
-    public List<Podcast> listarTodos() {
-        EntityManager em = emf.createEntityManager();
+    public PodcastDAO() {
         try {
-            return em.createQuery("SELECT p FROM Podcast p", Podcast.class).getResultList();
-        } finally {
-            em.close();
+            // Busca el DataSource configurado en context.xml
+            InitialContext ctx = new InitialContext();
+            dataSource = (DataSource) ctx.lookup("java:/comp/env/jdbc/emisoradb2");
+        } catch (NamingException e) {
+            throw new RuntimeException("No se pudo encontrar el DataSource", e);
         }
     }
 
-    public Optional<Podcast> buscarPorId(Long id) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            return Optional.ofNullable(em.find(Podcast.class, id));
-        } finally {
-            em.close();
+    public List<Podcast> listarTodos() {
+        List<Podcast> podcasts = new ArrayList<>();
+        String sql = "SELECT id, titulo, descripcion, url FROM podcasts";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Podcast podcast = new Podcast();
+                podcast.setId(rs.getLong("id"));
+                podcast.setTitulo(rs.getString("titulo"));
+                podcast.setGenero(rs.getString("genero"));
+                podcast.setUrlAudio(rs.getString("urlAudio"));
+                podcasts.add(podcast);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar los podcasts", e);
         }
+
+        return podcasts;
+    }
+
+    public Podcast buscarPorId(Long id) {
+        String sql = "SELECT id, titulo, descripcion, url FROM podcasts WHERE id = ?";
+        Podcast podcast = null;
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    podcast = new Podcast();
+                    podcast.setId(rs.getLong("id"));
+                    podcast.setTitulo(rs.getString("titulo"));
+                    podcast.setGenero(rs.getString("genero"));
+                    podcast.setUrlAudio(rs.getString("urlAudio"));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar el podcast con ID " + id, e);
+        }
+
+        return podcast;
     }
 
     public void guardar(Podcast podcast) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            em.getTransaction().begin();
-            if (podcast.getId() == null) {
-                em.persist(podcast); // Crear un nuevo podcast
-            } else {
-                em.merge(podcast); // Actualizar un podcast existente
+        String sql = podcast.getId() == null
+                ? "INSERT INTO podcasts (titulo, descripcion, url) VALUES (?, ?, ?)"
+                : "UPDATE podcasts SET titulo = ?, descripcion = ?, url = ? WHERE id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, podcast.getTitulo());
+            stmt.setString(2, podcast.getGenero());
+            stmt.setString(3, podcast.getUrlAudio());
+            if (podcast.getId() != null) {
+                stmt.setLong(4, podcast.getId());
             }
-            em.getTransaction().commit();
-        } finally {
-            em.close();
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al guardar el podcast", e);
         }
     }
 
     public void eliminar(Long id) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            Podcast podcast = em.find(Podcast.class, id);
-            if (podcast != null) {
-                em.getTransaction().begin();
-                em.remove(podcast);
-                em.getTransaction().commit();
-            }
-        } finally {
-            em.close();
+        String sql = "DELETE FROM podcasts WHERE id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar el podcast con ID " + id, e);
         }
     }
 }
+
 
 

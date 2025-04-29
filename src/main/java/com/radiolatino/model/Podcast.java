@@ -18,11 +18,11 @@ public class Podcast {
 
     @ManyToOne
     @JoinColumn(name = "genero_id")
-    private Genero genero;
+    private String genero;
 
     public Podcast() {}
 
-    public Podcast(String titulo, String urlAudio, Genero genero) {
+    public Podcast(String titulo, String urlAudio, String genero) {
         this.titulo = titulo;
         this.urlAudio = urlAudio;
         this.genero = genero;
@@ -34,6 +34,6 @@ public class Podcast {
     public void setTitulo(String titulo) { this.titulo = titulo; }
     public String getUrlAudio() { return urlAudio; }
     public void setUrlAudio(String urlAudio) { this.urlAudio = urlAudio; }
-    public Genero getGenero() { return genero; }
-    public void setGenero(Genero genero) { this.genero = genero; }
+    public String getGenero() { return genero; }
+    public void setGenero(String genero) { this.genero = genero; }
 }
