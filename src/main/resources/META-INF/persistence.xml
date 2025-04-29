@@ -29,6 +29,11 @@
             <!-- Opciones de rendimiento (opcional) -->
             <property name="hibernate.jdbc.batch_size" value="20"/>
             <property name="hibernate.cache.use_second_level_cache" value="false"/>
+
+            <!-- Configuración Variables de Entorno Render-->
+            <property name="jakarta.persistence.jdbc.user" value="${DB_USER}"/>
+            <property name="jakarta.persistence.jdbc.password" value="${DB_PASSWORD}"/>
+            <property name="jakarta.persistence.jdbc.url" value="${DB_URL}"/>
         </properties>
     </persistence-unit>
 </persistence>
