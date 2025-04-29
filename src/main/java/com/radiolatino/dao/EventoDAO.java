@@ -1,75 +1,151 @@
 package com.radiolatino.dao;
 
 import com.radiolatino.model.Evento;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class EventoDAO {
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("emisoradb2");
 
-    public List<Evento> listarTodos() {
-        EntityManager em = emf.createEntityManager();
+    private DataSource dataSource;
+
+    public EventoDAO() {
         try {
-            return em.createQuery("SELECT e FROM Evento e", Evento.class).getResultList();
-        } finally {
-            em.close();
+            // Busca el DataSource configurado en context.xml
+            InitialContext ctx = new InitialContext();
+            dataSource = (DataSource) ctx.lookup("java:/comp/env/jdbc/emisoradb2");
+        } catch (NamingException e) {
+            throw new RuntimeException("No se pudo encontrar el DataSource", e);
         }
     }
 
-    public Optional<Evento> buscarPorId(Long id) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            return Optional.ofNullable(em.find(Evento.class, id));
-        } finally {
-            em.close();
+    public List<Evento> listarTodos() {
+        List<Evento> eventos = new ArrayList<>();
+        String sql = "SELECT id, nombre, lugar, fecha, organizador FROM eventos";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Evento evento = new Evento();
+                evento.setId(rs.getLong("id"));
+                evento.setNombre(rs.getString("nombre"));
+                evento.setLugar(rs.getString("lugar"));
+                evento.setFecha(rs.getDate("fecha").toLocalDate());
+                evento.setOrganizador(rs.getString("organizador"));
+                eventos.add(evento);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar los eventos", e);
         }
+
+        return eventos;
+    }
+
+    public Evento buscarPorId(Long id) {
+        String sql = "SELECT id, nombre, lugar, fecha, organizador FROM eventos WHERE id = ?";
+        Evento evento = null;
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    evento = new Evento();
+                    evento.setId(rs.getLong("id"));
+                    evento.setNombre(rs.getString("nombre"));
+                    evento.setLugar(rs.getString("lugar"));
+                    evento.setFecha(rs.getDate("fecha").toLocalDate());
+                    evento.setOrganizador(rs.getString("organizador"));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar el evento con ID " + id, e);
+        }
+
+        return evento;
+    }
+
+    public List<Evento> buscarPorCriterio(String criterio) {
+        List<Evento> eventos = new ArrayList<>();
+        String sql = "SELECT id, nombre, lugar, fecha, organizador FROM eventos " +
+                "WHERE LOWER(nombre) LIKE ? OR LOWER(lugar) LIKE ? OR LOWER(organizador) LIKE ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            String criterioLike = "%" + criterio.toLowerCase() + "%";
+            stmt.setString(1, criterioLike);
+            stmt.setString(2, criterioLike);
+            stmt.setString(3, criterioLike);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Evento evento = new Evento();
+                    evento.setId(rs.getLong("id"));
+                    evento.setNombre(rs.getString("nombre"));
+                    evento.setLugar(rs.getString("lugar"));
+                    evento.setFecha(rs.getDate("fecha").toLocalDate());
+                    evento.setOrganizador(rs.getString("organizador"));
+                    eventos.add(evento);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar eventos por criterio", e);
+        }
+
+        return eventos;
     }
 
     public void guardar(Evento evento) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            em.getTransaction().begin();
-            if (evento.getId() == null) {
-                em.persist(evento); // Crear nuevo evento
-            } else {
-                em.merge(evento); // Actualizar evento existente
+        String sql = evento.getId() == null
+                ? "INSERT INTO eventos (nombre, lugar, fecha, organizador) VALUES (?, ?, ?, ?)"
+                : "UPDATE eventos SET nombre = ?, lugar = ?, fecha = ?, organizador = ? WHERE id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, evento.getNombre());
+            stmt.setString(2, evento.getLugar());
+            stmt.setDate(3, java.sql.Date.valueOf(evento.getFecha()));
+            stmt.setString(4, evento.getOrganizador());
+
+            if (evento.getId() != null) {
+                stmt.setLong(5, evento.getId());
             }
-            em.getTransaction().commit();
-        } finally {
-            em.close();
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al guardar el evento", e);
         }
     }
 
     public void eliminar(Long id) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            Evento evento = em.find(Evento.class, id);
-            if (evento != null) {
-                em.getTransaction().begin();
-                em.remove(evento);
-                em.getTransaction().commit();
-            }
-        } finally {
-            em.close();
-        }
-    }
+        String sql = "DELETE FROM eventos WHERE id = ?";
 
-    public List<Evento> buscarPorCriterio(String criterio) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            // Usar una consulta JPQL para buscar eventos según el criterio
-            return em.createQuery(
-                            "SELECT e FROM Evento e WHERE LOWER(e.nombre) LIKE LOWER(:criterio) " +
-                                    "OR LOWER(e.lugar) LIKE LOWER(:criterio) " +
-                                    "OR LOWER(e.organizador) LIKE LOWER(:criterio)", Evento.class)
-                    .setParameter("criterio", "%" + criterio + "%")
-                    .getResultList();
-        } finally {
-            em.close();
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar el evento con ID " + id, e);
         }
     }
 }
+
