@@ -4,23 +4,29 @@
         xsi:schemaLocation="http://jakarta.ee/xml/ns/persistence
         http://jakarta.ee/xml/ns/persistence.xsd">
 
-    <persistence-unit name="miUnidadPersistencia">
-        <class>com.radiolatino.model.Usuario</class> <!-- Asegúrate de incluir tus entidades -->
+    <persistence-unit name="emisoradb2">
+        <!-- Entidades del proyecto -->
+        <class>com.radiolatino.model.Usuario</class>
+        <class>com.radiolatino.model.Cancion</class>
+        <class>com.radiolatino.model.Evento</class>
+        <class>com.radiolatino.model.GrupoMusical</class>
+        <class>com.radiolatino.model.Genero</class>
+        <class>com.radiolatino.model.Podcast</class>
 
         <properties>
-            <!-- Configuración para PostgreSQL (Docker) -->
+            <!-- Configuración de conexión a la base de datos en Render -->
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://db:5432/radiolatino"/>
-            <property name="jakarta.persistence.jdbc.user" value="postgres"/>
-            <property name="jakarta.persistence.jdbc.password" value="mypassword"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://<TU-URL-DE-RENDER>:5432/emisoradb2"/>
+            <property name="jakarta.persistence.jdbc.user" value="<TU-USUARIO>"/>
+            <property name="jakarta.persistence.jdbc.password" value="<TU-CONTRASEÑA>"/>
 
-            <!-- Hibernate -->
+            <!-- Configuración de Hibernate -->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
 
-            <!-- Performance tuning (opcional) -->
+            <!-- Opciones de rendimiento (opcional) -->
             <property name="hibernate.jdbc.batch_size" value="20"/>
             <property name="hibernate.cache.use_second_level_cache" value="false"/>
         </properties>

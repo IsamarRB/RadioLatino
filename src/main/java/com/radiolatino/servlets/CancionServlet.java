@@ -70,7 +70,7 @@ public class CancionServlet extends HttpServlet {
             Optional<Cancion> cancion = cancionService.buscarPorId(id);
             if (cancion.isPresent()) {
                 req.setAttribute("cancion", cancion.get());
-                req.getRequestDispatcher("/WEB-INF/DetalleCancion.jsp.jsp").forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/DetalleCancion.jsp").forward(req, resp);
             } else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Canción no encontrada.");
             }
