@@ -1,6 +1,7 @@
 package com.radiolatino.dao;
 
 import com.radiolatino.model.Cancion;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -40,7 +41,11 @@ public class CancionDAO {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(cancion);
+            if (cancion.getId() == null) {
+                em.persist(cancion); // Crear nueva canción
+            } else {
+                em.merge(cancion); // Actualizar canción existente
+            }
             em.getTransaction().commit();
         } finally {
             em.close();
