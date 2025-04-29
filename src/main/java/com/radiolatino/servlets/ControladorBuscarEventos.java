@@ -1,5 +1,6 @@
-package com.radiolatino.controller;
+package com.radiolatino.servlets;
 
+import com.radiolatino.service.EventoService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

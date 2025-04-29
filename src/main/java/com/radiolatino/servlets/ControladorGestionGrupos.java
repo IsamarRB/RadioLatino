@@ -1,5 +1,7 @@
-package com.radiolatino.controller;
+package com.radiolatino.servlets;
 
+import com.radiolatino.model.GrupoMusical;
+import com.radiolatino.service.GrupoMusicalService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -7,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @WebServlet("/GestionGrupos")
 public class ControladorGestionGrupos extends HttpServlet {

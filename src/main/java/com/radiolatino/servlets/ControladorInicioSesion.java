@@ -1,4 +1,4 @@
-package com.radiolatino.controller;
+package com.radiolatino.servlets;
 
 import com.radiolatino.model.Usuario;
 import com.radiolatino.service.UsuarioService;
