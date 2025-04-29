@@ -2,6 +2,7 @@ package com.radiolatino.servlets;
 
 import com.radiolatino.dao.UsuarioDAO;
 import com.radiolatino.model.Usuario;
+
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.servlet.ServletException;
@@ -14,8 +15,8 @@ import java.io.IOException;
 
 @WebServlet("/app")
 public class RadioLatinoServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
     private UsuarioDAO usuarioDAO;
 
     @Override
@@ -35,10 +36,10 @@ public class RadioLatinoServlet extends HttpServlet {
                     procesarLogin(request, response);
                     break;
                 default:
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción no soportada");
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción no soportada.");
             }
         } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción no especificada");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción no especificada.");
         }
     }
 
@@ -46,8 +47,9 @@ public class RadioLatinoServlet extends HttpServlet {
             throws ServletException, IOException {
         String correo = request.getParameter("correo");
 
+        // Validación del correo
         if (correo == null || correo.isEmpty()) {
-            request.setAttribute("error", "Correo es requerido");
+            request.setAttribute("error", "El campo de correo es obligatorio.");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
             return;
         }
@@ -55,10 +57,12 @@ public class RadioLatinoServlet extends HttpServlet {
         Usuario usuario = usuarioDAO.findByCorreo(correo);
 
         if (usuario != null) {
+            // Usuario encontrado
             request.getSession().setAttribute("usuario", usuario);
-            request.getRequestDispatcher("/WEB-INF/jsp/BuscarEventos.jsp.jsp").forward(request, response);
+            response.sendRedirect("BuscarEventos.jsp"); // Redirige al dashboard o página principal.
         } else {
-            request.setAttribute("error", "Correo no válido");
+            // Usuario no encontrado
+            request.setAttribute("error", "Correo no registrado.");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
     }

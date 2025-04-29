@@ -1,6 +1,5 @@
 package com.radiolatino.model;
 
-
 import jakarta.persistence.*;
 
 @Entity
@@ -12,22 +11,34 @@ public class Usuario {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String nombre;
-
-    @Column(nullable = false, unique = true)
     private String correo;
 
-    public Usuario(String nombre, String contraseña, String rol) {}
+    @Column(nullable = false)
+    private String nombre;
 
-    public Usuario(String nombre, String correo) {
-        this.nombre = nombre;
+    // Getters y Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
         this.correo = correo;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-    public String getCorreo() { return correo; }
-    public void setCorreo(String correo) { this.correo = correo; }
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 }
+
