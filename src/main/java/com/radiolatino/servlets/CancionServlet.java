@@ -60,8 +60,8 @@ public class CancionServlet extends HttpServlet {
 
     private void listarCanciones(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Cancion> canciones = cancionService.listarTodos();
-        req.setAttribute("canciones", canciones);
-        req.getRequestDispatcher("/WEB-INF/vistas/listarCanciones.jsp").forward(req, resp);
+        req.setAttribute("Canciones.jsp", canciones);
+        req.getRequestDispatcher("/WEB-INF/ListarCanciones.jsp").forward(req, resp);
     }
 
     private void mostrarDetalle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -70,7 +70,7 @@ public class CancionServlet extends HttpServlet {
             Optional<Cancion> cancion = cancionService.buscarPorId(id);
             if (cancion.isPresent()) {
                 req.setAttribute("cancion", cancion.get());
-                req.getRequestDispatcher("/WEB-INF/vistas/detalleCancion.jsp").forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/DetalleCancion.jsp.jsp").forward(req, resp);
             } else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Canción no encontrada.");
             }
@@ -89,7 +89,7 @@ public class CancionServlet extends HttpServlet {
                     req.setAttribute("cancion", cancion.get());
                 }
             }
-            req.getRequestDispatcher("/WEB-INF/vistas/formularioCancion.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/FormularioCancion.jsp").forward(req, resp);
         } catch (NumberFormatException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido para editar la canción.");
         }

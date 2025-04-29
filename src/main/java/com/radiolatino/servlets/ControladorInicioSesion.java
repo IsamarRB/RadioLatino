@@ -33,11 +33,11 @@ public class ControladorInicioSesion extends HttpServlet {
         if (usuarioOpt.isPresent()) {
             // Si es válido, iniciar sesión
             req.getSession().setAttribute("usuario", usuarioOpt.get());
-            resp.sendRedirect("Inicio.jsp"); // Redirigir al inicio
+            resp.sendRedirect("/WEB-INF/Inicio.jsp"); // Redirigir al inicio
         } else {
             // Manejar credenciales incorrectas
             req.setAttribute("error", "Usuario o contraseña incorrectos.");
-            req.getRequestDispatcher("Login.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/Login.jsp").forward(req, resp);
         }
     }
 }

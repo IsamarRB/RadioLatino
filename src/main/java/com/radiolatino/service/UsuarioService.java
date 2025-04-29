@@ -40,5 +40,6 @@ public class UsuarioService implements BaseService<Usuario> {
     }
 
     public Optional<Usuario> autenticar(String username, String password) {
+        return Optional.empty();
     }
 }

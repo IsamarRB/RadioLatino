@@ -50,7 +50,7 @@ public class RadioLatinoServlet extends HttpServlet {
         // Validación del correo
         if (correo == null || correo.isEmpty()) {
             request.setAttribute("error", "El campo de correo es obligatorio.");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/Index.jsp").forward(request, response);
             return;
         }
 
@@ -59,11 +59,11 @@ public class RadioLatinoServlet extends HttpServlet {
         if (usuario != null) {
             // Usuario encontrado
             request.getSession().setAttribute("usuario", usuario);
-            response.sendRedirect("BuscarEventos.jsp"); // Redirige al dashboard o página principal.
+            response.sendRedirect("/WEB-INF/BuscarEventos.jsp"); // Redirige al dashboard o página principal.
         } else {
             // Usuario no encontrado
             request.setAttribute("error", "Correo no registrado.");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/Index.jsp").forward(request, response);
         }
     }
 }

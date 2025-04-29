@@ -53,7 +53,7 @@ public class ControladorGestionGrupos extends HttpServlet {
     private void listarGrupos(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<GrupoMusical> grupos = grupoService.listarTodos();
         req.setAttribute("grupos", grupos);
-        req.getRequestDispatcher("/WEB-INF/vistas/listarGrupos.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/ListarGrupos.jsp").forward(req, resp);
     }
 
     private void mostrarDetalle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -62,7 +62,7 @@ public class ControladorGestionGrupos extends HttpServlet {
             Optional<GrupoMusical> grupo = grupoService.buscarPorId(id);
             if (grupo.isPresent()) {
                 req.setAttribute("grupo", grupo.get());
-                req.getRequestDispatcher("/WEB-INF/vistas/detalleGrupo.jsp").forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/DetalleGrupo.jsp").forward(req, resp);
             } else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Grupo musical no encontrado.");
             }

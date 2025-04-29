@@ -60,7 +60,7 @@ public class GeneroServlet extends HttpServlet {
     private void listarGeneros(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Genero> generos = service.listarTodos();
         req.setAttribute("generos", generos);
-        req.getRequestDispatcher("/WEB-INF/vistas/listarGeneros.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/ListarGenero.jsp").forward(req, resp);
     }
 
     private void mostrarDetalleGenero(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -69,7 +69,7 @@ public class GeneroServlet extends HttpServlet {
             Optional<Genero> genero = service.buscarPorId(id);
             if (genero.isPresent()) {
                 req.setAttribute("genero", genero.get());
-                req.getRequestDispatcher("/WEB-INF/vistas/detalleGenero.jsp").forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/DetalleGenero.jsp").forward(req, resp);
             } else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Género no encontrado.");
             }

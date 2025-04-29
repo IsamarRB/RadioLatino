@@ -26,6 +26,6 @@ public class ControladorBuscarEventos extends HttpServlet {
 
         List<Evento> eventos = eventoService.buscarPorCriterio(criterio);
         req.setAttribute("eventos", eventos);
-        req.getRequestDispatcher("/WEB-INF/vistas/listarEventos.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/ListarEventos.jsp").forward(req, resp);
     }
 }

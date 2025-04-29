@@ -60,7 +60,7 @@ public class CantanteServlet extends HttpServlet {
     private void listarCantantes(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Cantante> cantantes = service.listarTodos();
         req.setAttribute("cantantes", cantantes);
-        req.getRequestDispatcher("/WEB-INF/vistas/listarCantantes.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/ListarCantantes.jsp").forward(req, resp);
     }
 
     private void mostrarDetalleCantante(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -69,7 +69,7 @@ public class CantanteServlet extends HttpServlet {
             Optional<Cantante> cantante = service.buscarPorId(id);
             if (cantante.isPresent()) {
                 req.setAttribute("cantante", cantante.get());
-                req.getRequestDispatcher("/WEB-INF/vistas/detalleCantante.jsp").forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/DetalleCantante.jsp").forward(req, resp);
             } else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Cantante no encontrado.");
             }

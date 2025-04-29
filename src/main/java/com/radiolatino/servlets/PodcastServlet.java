@@ -60,7 +60,7 @@ public class PodcastServlet extends HttpServlet {
     private void listarPodcasts(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Podcast> podcasts = service.listarTodos();
         req.setAttribute("podcasts", podcasts);
-        req.getRequestDispatcher("/WEB-INF/vistas/listarPodcasts.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/ListarPodcasts.jsp").forward(req, resp);
     }
 
     private void mostrarDetallePodcast(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -69,7 +69,7 @@ public class PodcastServlet extends HttpServlet {
             Optional<Podcast> podcast = service.buscarPorId(id);
             if (podcast.isPresent()) {
                 req.setAttribute("podcast", podcast.get());
-                req.getRequestDispatcher("/WEB-INF/vistas/detallePodcast.jsp").forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/DetallePodcast.jsp").forward(req, resp);
             } else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Podcast no encontrado.");
             }
