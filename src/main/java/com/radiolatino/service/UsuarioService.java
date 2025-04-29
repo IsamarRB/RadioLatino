@@ -38,4 +38,7 @@ public class UsuarioService implements BaseService<Usuario> {
     public Usuario login(String correo, String password) {
         return usuarioRepository.findByCorreo(correo, password);
     }
+
+    public Optional<Usuario> autenticar(String username, String password) {
+    }
 }
