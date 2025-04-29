@@ -59,5 +59,17 @@ public class EventoDAO {
     }
 
     public List<Evento> buscarPorCriterio(String criterio) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            // Usar una consulta JPQL para buscar eventos según el criterio
+            return em.createQuery(
+                            "SELECT e FROM Evento e WHERE LOWER(e.nombre) LIKE LOWER(:criterio) " +
+                                    "OR LOWER(e.lugar) LIKE LOWER(:criterio) " +
+                                    "OR LOWER(e.organizador) LIKE LOWER(:criterio)", Evento.class)
+                    .setParameter("criterio", "%" + criterio + "%")
+                    .getResultList();
+        } finally {
+            em.close();
+        }
     }
 }
