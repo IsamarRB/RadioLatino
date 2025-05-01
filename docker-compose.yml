@@ -3,12 +3,12 @@ version: '3.8'
 services:
   db:
     image: postgres:13
-    container_name: radiolatino_db
+    container_name: radiolatino_container
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: radiolatino
+      POSTGRES_USER: radiolatino_user
+      POSTGRES_PASSWORD: CQnQZbKc0UPNfVZZYRzOfuRCmKdWZceX
+      POSTGRES_DB: emisoradb2
     ports:
       - "5432:5432"
     volumes:
