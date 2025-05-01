@@ -22,7 +22,7 @@ WORKDIR /usr/local/tomcat
 RUN rm -rf webapps/*
 
 # Copiar el WAR compilado
-COPY --from=builder /app/target/RadioLatino.war webapps/RadioLatino.war
+COPY --from=builder /app/target/radiolatino.war webapps/radiolatino.war
 
 # Exponer el puerto 8080
 EXPOSE 8080
