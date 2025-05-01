@@ -31,7 +31,7 @@ public class ControladorInicioSesion extends HttpServlet {
         Optional<Usuario> usuarioOpt = usuarioService.autenticar(username, password);
 
         if (usuarioOpt.isPresent()) {
-            // Si es válido, iniciar sesión
+            // Sí es válido, iniciar sesión
             req.getSession().setAttribute("usuario", usuarioOpt.get());
             resp.sendRedirect("/WEB-INF/Inicio.jsp"); // Redirigir al inicio
         } else {

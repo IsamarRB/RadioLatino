@@ -1,6 +1,7 @@
 package com.radiolatino.dao;
 
 import com.radiolatino.model.Usuario;
+import jakarta.persistence.EntityManagerFactory;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -14,7 +15,7 @@ public class UsuarioDAO {
 
     private DataSource dataSource;
 
-    public UsuarioDAO() {
+    public UsuarioDAO(EntityManagerFactory emf) {
         try {
             // Busca el DataSource configurado en context.xml
             InitialContext ctx = new InitialContext();

@@ -14,7 +14,7 @@ public class GrupoMusicalService {
     }
 
     public Optional<GrupoMusical> buscarPorId(Long id) {
-        return grupoMusicalDAO.buscarPorId(id);
+        return Optional.ofNullable(grupoMusicalDAO.buscarPorId(id));
     }
 
     public void guardar(GrupoMusical grupo) {
