@@ -42,7 +42,7 @@ public class UsuarioServlet extends HttpServlet {
         // Validación de los parámetros
         if (usuario == null || usuario.isEmpty() || password == null || password.isEmpty()) {
             req.setAttribute("error", "Usuario y contraseña son obligatorios.");
-            req.getRequestDispatcher("/WEB-INF/Login.jsp").forward(req, resp);
+            req.getRequestDispatcher("/webapp/Login.jsp").forward(req, resp);
             return;
         }
 
@@ -51,16 +51,16 @@ public class UsuarioServlet extends HttpServlet {
         if (u != null) {
             // Usuario autenticado correctamente
             req.getSession().setAttribute("usuario", u);
-            resp.sendRedirect("/WEB-INF/BuscarEventos.jsp");
+            resp.sendRedirect("/WEB-INF/views/BuscarEventos.jsp");
         } else {
             // Usuario o contraseña incorrectos
             req.setAttribute("error", "Usuario o contraseña incorrectos.");
-            req.getRequestDispatcher("/WEB-INF/Login.jsp").forward(req, resp);
+            req.getRequestDispatcher("/webapp/Login.jsp").forward(req, resp);
         }
     }
 
     private void procesarLogout(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.getSession().invalidate(); // Invalida la sesión
-        resp.sendRedirect("/WEB-INF/Login.jsp"); // Redirige a la página de login
+        resp.sendRedirect("/webapp/Login.jsp"); // Redirige a la página de login
     }
 }
